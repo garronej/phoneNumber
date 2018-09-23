@@ -1,5 +1,6 @@
 
-require("../../node_modules/intl-tel-input/build/js/utils");
+//require("../../node_modules/intl-tel-input/build/js/utils");
+import "intl-tel-input/build/js/utils";
 
 //const intlTelInputUtils= global["intlTelInputUtils"];
 

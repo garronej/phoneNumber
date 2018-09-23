@@ -1,3 +1,4 @@
+import "intl-tel-input/build/js/utils";
 export declare type phoneNumber = string;
 export declare namespace phoneNumber {
     /**

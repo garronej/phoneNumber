@@ -458,7 +458,8 @@ m("intlTelInputUtils.numberType",{FIXED_LINE:0,MOBILE:1,FIXED_LINE_OR_MOBILE:2,T
 (function (global){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-require("../../node_modules/intl-tel-input/build/js/utils");
+//require("../../node_modules/intl-tel-input/build/js/utils");
+require("intl-tel-input/build/js/utils");
 var phoneNumber;
 (function (phoneNumber_1) {
     /**
@@ -590,4 +591,4 @@ var phoneNumber;
 })(phoneNumber = exports.phoneNumber || (exports.phoneNumber = {}));
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../../node_modules/intl-tel-input/build/js/utils":1}]},{},[2]);
+},{"intl-tel-input/build/js/utils":1}]},{},[2]);

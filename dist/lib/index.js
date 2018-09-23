@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-require("../../node_modules/intl-tel-input/build/js/utils");
+//require("../../node_modules/intl-tel-input/build/js/utils");
+require("intl-tel-input/build/js/utils");
 var phoneNumber;
 (function (phoneNumber_1) {
     /**
