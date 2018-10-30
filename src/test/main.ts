@@ -17,4 +17,6 @@ console.log( phoneNumber.build("302 44444444", "fr") );
 
 console.log( phoneNumber.build("0033636786385", "it") );
 
+console.log( phoneNumber.prettyPrint("+33636786385", "LOCAL") );
+
 console.log("DONE");
