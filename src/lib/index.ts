@@ -134,21 +134,29 @@ export namespace phoneNumber {
 	}
 
 	/**
-	 * Pretty print the phone number in national format if
-	 * it is a number from the SIM country,
-	 * in international format if it's from an other country
-	 * or do nothing if it's not dialable.
-	 * 
-	 * @param phoneNumber 
-	 * @param simIso 
+	 * Pretty print (format) the phone number:
+	 * In national format if the iso of the number and the provided iso matches.
+	 * In international format if no iso is provided or
+	 * the iso of the number and the provided iso mismatch.
+	 * Do nothing if it's not dialable.
 	 */
 	export function prettyPrint(
 		phoneNumber: phoneNumber,
-		simIso: string | undefined
+		simIso?: string
 	): string {
 
-		if (!simIso || !isValidE164(phoneNumber)) {
+		if (!isValidE164(phoneNumber)) {
 			return phoneNumber;
+		}
+
+		if( !simIso ){
+
+			return intlTelInputUtils.formatNumber(
+				phoneNumber,
+				undefined,
+				intlTelInputUtils.numberFormat.INTERNATIONAL
+			);
+
 		}
 
 		const pnNational = intlTelInputUtils.formatNumber(
@@ -157,7 +165,7 @@ export namespace phoneNumber {
 			intlTelInputUtils.numberFormat.NATIONAL
 		);
 
-		let pnBackToE164 = (intlTelInputUtils as any).formatNumber(
+		const pnBackToE164 = intlTelInputUtils.formatNumber(
 			pnNational,
 			simIso,
 			intlTelInputUtils.numberFormat.E164
@@ -196,6 +204,13 @@ export namespace phoneNumber {
 
 		if (isValidE164(phoneNumber)) {
 
+			if (
+				rawInputDry.startsWith("00") &&
+				rawInputDry.replace(/^00/, "+") === phoneNumber
+			) {
+				return true;
+			}
+
 			const pnNationalDry = intlTelInputUtils.formatNumber(
 				phoneNumber,
 				null,
@@ -212,6 +227,6 @@ export namespace phoneNumber {
 
 	}
 
-	global["phoneNumber"]= phoneNumber;
+	global["phoneNumber"] = phoneNumber;
 
 }

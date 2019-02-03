@@ -34,14 +34,12 @@ export declare namespace phoneNumber {
     /** let us test if we should allow the number to be dialed */
     function isDialable(phoneNumber: phoneNumber): boolean;
     /**
-     * Pretty print the phone number in national format if
-     * it is a number from the SIM country,
-     * in international format if it's from an other country
-     * or do nothing if it's not dialable.
-     *
-     * @param phoneNumber
-     * @param simIso
+     * Pretty print (format) the phone number:
+     * In national format if the iso of the number and the provided iso matches.
+     * In international format if no iso is provided or
+     * the iso of the number and the provided iso mismatch.
+     * Do nothing if it's not dialable.
      */
-    function prettyPrint(phoneNumber: phoneNumber, simIso: string | undefined): string;
+    function prettyPrint(phoneNumber: phoneNumber, simIso?: string): string;
     function areSame(phoneNumber: phoneNumber, rawInput: string): boolean;
 }

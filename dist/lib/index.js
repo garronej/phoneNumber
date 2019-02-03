@@ -90,17 +90,18 @@ var phoneNumber;
             intlTelInputUtils.isValidNumber(phoneNumber));
     }
     /**
-     * Pretty print the phone number in national format if
-     * it is a number from the SIM country,
-     * in international format if it's from an other country
-     * or do nothing if it's not dialable.
-     *
-     * @param phoneNumber
-     * @param simIso
+     * Pretty print (format) the phone number:
+     * In national format if the iso of the number and the provided iso matches.
+     * In international format if no iso is provided or
+     * the iso of the number and the provided iso mismatch.
+     * Do nothing if it's not dialable.
      */
     function prettyPrint(phoneNumber, simIso) {
-        if (!simIso || !isValidE164(phoneNumber)) {
+        if (!isValidE164(phoneNumber)) {
             return phoneNumber;
+        }
+        if (!simIso) {
+            return intlTelInputUtils.formatNumber(phoneNumber, undefined, intlTelInputUtils.numberFormat.INTERNATIONAL);
         }
         var pnNational = intlTelInputUtils.formatNumber(phoneNumber, null, intlTelInputUtils.numberFormat.NATIONAL);
         var pnBackToE164 = intlTelInputUtils.formatNumber(pnNational, simIso, intlTelInputUtils.numberFormat.E164);
@@ -121,6 +122,10 @@ var phoneNumber;
             return true;
         }
         if (isValidE164(phoneNumber)) {
+            if (rawInputDry.startsWith("00") &&
+                rawInputDry.replace(/^00/, "+") === phoneNumber) {
+                return true;
+            }
             var pnNationalDry = intlTelInputUtils.formatNumber(phoneNumber, null, intlTelInputUtils.numberFormat.NATIONAL).replace(/[^*#+0-9]/g, "");
             if (rawInputDry === pnNationalDry) {
                 return true;
