@@ -1,9 +1,45 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 //require("../../node_modules/intl-tel-input/build/js/utils");
-require("intl-tel-input/build/js/utils");
+//import "intl-tel-input/build/js/utils";
+Object.defineProperty(exports, "__esModule", { value: true });
+function loadUtil() {
+    console.log("coucou");
+    if (global["intlTelInputUtils"] !== undefined) {
+        return;
+    }
+    if (typeof process !== "undefined" &&
+        process.release.name === "node") {
+        console.log("should load");
+        //Trick browserify
+        var path = "../../node_modules/intl-tel-input/build/js/utils";
+        require(path);
+    }
+    else {
+        //<script src="<%= `${assets_root}plugins/ui/intl-tel-input/js/utils.js`; %>"></script>
+        throw new Error("Util script should be loaded");
+    }
+}
 var phoneNumber;
 (function (phoneNumber_1) {
+    function remoteLoadUtil() {
+        return new Promise(function (resolve) {
+            return (function (d, s, id) {
+                var js, fjs = d.getElementsByTagName(s)[0];
+                if (d.getElementById(id)) {
+                    resolve();
+                    return;
+                }
+                js = d.createElement(s);
+                js.id = id;
+                js.onload = function () {
+                    resolve();
+                };
+                js.src = "//static.semasim.com/plugins/ui/intl-tel-input/js/utils.js";
+                fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', "intlTelInputUtils"));
+        });
+    }
+    phoneNumber_1.remoteLoadUtil = remoteLoadUtil;
     /**
      * This function will try to convert a raw string as a E164 formated phone number.
      *
@@ -35,6 +71,7 @@ var phoneNumber;
      */
     function build(rawInput, iso, mustBeDialable) {
         if (mustBeDialable === void 0) { mustBeDialable = undefined; }
+        loadUtil();
         var shouldFormatToE164 = (function () {
             if (!iso) {
                 return false;
@@ -86,6 +123,7 @@ var phoneNumber;
     }
     phoneNumber_1.isDialable = isDialable;
     function isValidE164(phoneNumber) {
+        loadUtil();
         return (phoneNumber[0] === "+" &&
             intlTelInputUtils.isValidNumber(phoneNumber));
     }
@@ -97,6 +135,7 @@ var phoneNumber;
      * Do nothing if it's not dialable.
      */
     function prettyPrint(phoneNumber, simIso) {
+        loadUtil();
         if (!isValidE164(phoneNumber)) {
             return phoneNumber;
         }
@@ -114,6 +153,7 @@ var phoneNumber;
     }
     phoneNumber_1.prettyPrint = prettyPrint;
     function areSame(phoneNumber, rawInput) {
+        loadUtil();
         if (phoneNumber === rawInput) {
             return true;
         }

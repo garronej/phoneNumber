@@ -1,14 +1,67 @@
-
-//require("../../node_modules/intl-tel-input/build/js/utils");
-import "intl-tel-input/build/js/utils";
-
-//const intlTelInputUtils= global["intlTelInputUtils"];
-
 declare const intlTelInputUtils: any;
 
 export type phoneNumber = string;
 
 export namespace phoneNumber {
+
+	function syncLoadUtilIfNode() {
+
+		const is_intlTelInputUtils_defined = (() => {
+
+			try {
+				intlTelInputUtils;
+			} catch{
+				return false;
+			}
+
+			return intlTelInputUtils !== undefined;
+
+		})();
+
+		if (is_intlTelInputUtils_defined) {
+			return;
+		}
+
+		if (
+			typeof process !== "undefined" &&
+			process.release.name === "node"
+		) {
+
+			//Trick browserify so it does not bundle.
+			let path = "../../node_modules/intl-tel-input/build/js/utils";
+
+			require(path);
+
+		} else {
+
+			throw new Error([
+				"Util script should be loaded, include it in the HTML",
+				"page or run async function remoteLoadUtil before use"
+			].join(" "));
+
+		}
+
+	}
+
+	export function remoteLoadUtil() {
+
+		return new Promise(resolve =>
+			(function (d, s, id) {
+				var js, fjs = d.getElementsByTagName(s)[0];
+				if (d.getElementById(id)) {
+					resolve();
+					return;
+				}
+				js = d.createElement(s); js.id = id;
+				js.onload = function () {
+					resolve();
+				};
+				js.src = "//github.com/garronej/phone-number/releases/download/intlTelInputUtils/utils.js";
+				fjs.parentNode!.insertBefore(js, fjs);
+			}(document, 'script', "intlTelInputUtils"))
+		);
+
+	}
 
 	/**
 	 * This function will try to convert a raw string as a E164 formated phone number.
@@ -40,18 +93,20 @@ export namespace phoneNumber {
 	 * 
 	 */
 	export function build(
-		rawInput: string, 
+		rawInput: string,
 		iso: string | undefined,
 		mustBeDialable: "MUST BE DIALABLE" | undefined = undefined
 	): phoneNumber {
 
+		syncLoadUtilIfNode();
+
 		const shouldFormatToE164: boolean = (() => {
 
-			if( !iso ){ 
+			if (!iso) {
 				return false;
 			}
 
-			const numberType= intlTelInputUtils.getNumberType(rawInput, iso);
+			const numberType = intlTelInputUtils.getNumberType(rawInput, iso);
 
 			switch (numberType) {
 				case intlTelInputUtils.numberType.FIXED_LINE:
@@ -78,7 +133,7 @@ export namespace phoneNumber {
 			/** If any char other than *+# () and number is present => match  */
 			if (rawInput.match(/[^*+#\ \-\(\)0-9]/)) {
 
-				if( mustBeDialable ){
+				if (mustBeDialable) {
 					throw new Error("unauthorized char, not dialable");
 				}
 
@@ -126,6 +181,8 @@ export namespace phoneNumber {
 
 	function isValidE164(phoneNumber: phoneNumber): boolean {
 
+		syncLoadUtilIfNode();
+
 		return (
 			phoneNumber[0] === "+" &&
 			intlTelInputUtils.isValidNumber(phoneNumber)
@@ -145,11 +202,13 @@ export namespace phoneNumber {
 		simIso?: string
 	): string {
 
+		syncLoadUtilIfNode();
+
 		if (!isValidE164(phoneNumber)) {
 			return phoneNumber;
 		}
 
-		if( !simIso ){
+		if (!simIso) {
 
 			return intlTelInputUtils.formatNumber(
 				phoneNumber,
@@ -191,6 +250,8 @@ export namespace phoneNumber {
 		phoneNumber: phoneNumber,
 		rawInput: string
 	): boolean {
+
+		syncLoadUtilIfNode();
 
 		if (phoneNumber === rawInput) {
 			return true;
