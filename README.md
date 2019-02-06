@@ -1,9 +1,11 @@
 # phone-number
 
 A phone numbers tool library that can be run on the web, node and Android.  
-Feature: Tell if two number ( with different formating ) are the same,
-generate pretty string for printing number, check if a number is dialable,
-convert to e164 formated number.
+Features:  
+- Tell if two number ( with different formating ) are the same.  
+- Generate pretty string for printing number.  
+- Check if a number is dialable.  
+- Convert raw user input to e164 formated number.
 
 ## How to use
 
@@ -16,7 +18,7 @@ To run in the browser either include this html tag in the page:
 <script src="//github.com/garronej/phone-number/releases/download/intlTelInputUtils/utils.js>"></script>
 ```
 
-Or run to lazily load the heavy utils script dependency.
+Or lazily load the heavy utils script dependency with:
 ```ts
 await phoneNumber.remoteLoadUtil();
 ```

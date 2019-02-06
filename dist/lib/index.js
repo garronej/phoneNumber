@@ -1,26 +1,33 @@
 "use strict";
-//require("../../node_modules/intl-tel-input/build/js/utils");
-//import "intl-tel-input/build/js/utils";
 Object.defineProperty(exports, "__esModule", { value: true });
-function loadUtil() {
-    console.log("coucou");
-    if (global["intlTelInputUtils"] !== undefined) {
-        return;
-    }
-    if (typeof process !== "undefined" &&
-        process.release.name === "node") {
-        console.log("should load");
-        //Trick browserify
-        var path = "../../node_modules/intl-tel-input/build/js/utils";
-        require(path);
-    }
-    else {
-        //<script src="<%= `${assets_root}plugins/ui/intl-tel-input/js/utils.js`; %>"></script>
-        throw new Error("Util script should be loaded");
-    }
-}
 var phoneNumber;
 (function (phoneNumber_1) {
+    function syncLoadUtilIfNode() {
+        var is_intlTelInputUtils_defined = (function () {
+            try {
+                intlTelInputUtils;
+            }
+            catch (_a) {
+                return false;
+            }
+            return intlTelInputUtils !== undefined;
+        })();
+        if (is_intlTelInputUtils_defined) {
+            return;
+        }
+        if (typeof process !== "undefined" &&
+            process.release.name === "node") {
+            //Trick browserify so it does not bundle.
+            var path = "../../node_modules/intl-tel-input/build/js/utils";
+            require(path);
+        }
+        else {
+            throw new Error([
+                "Util script should be loaded, include it in the HTML",
+                "page or run async function remoteLoadUtil before use"
+            ].join(" "));
+        }
+    }
     function remoteLoadUtil() {
         return new Promise(function (resolve) {
             return (function (d, s, id) {
@@ -34,7 +41,7 @@ var phoneNumber;
                 js.onload = function () {
                     resolve();
                 };
-                js.src = "//static.semasim.com/plugins/ui/intl-tel-input/js/utils.js";
+                js.src = "//github.com/garronej/phone-number/releases/download/intlTelInputUtils/utils.js";
                 fjs.parentNode.insertBefore(js, fjs);
             }(document, 'script', "intlTelInputUtils"));
         });
@@ -71,7 +78,7 @@ var phoneNumber;
      */
     function build(rawInput, iso, mustBeDialable) {
         if (mustBeDialable === void 0) { mustBeDialable = undefined; }
-        loadUtil();
+        syncLoadUtilIfNode();
         var shouldFormatToE164 = (function () {
             if (!iso) {
                 return false;
@@ -123,7 +130,7 @@ var phoneNumber;
     }
     phoneNumber_1.isDialable = isDialable;
     function isValidE164(phoneNumber) {
-        loadUtil();
+        syncLoadUtilIfNode();
         return (phoneNumber[0] === "+" &&
             intlTelInputUtils.isValidNumber(phoneNumber));
     }
@@ -135,7 +142,7 @@ var phoneNumber;
      * Do nothing if it's not dialable.
      */
     function prettyPrint(phoneNumber, simIso) {
-        loadUtil();
+        syncLoadUtilIfNode();
         if (!isValidE164(phoneNumber)) {
             return phoneNumber;
         }
@@ -153,7 +160,7 @@ var phoneNumber;
     }
     phoneNumber_1.prettyPrint = prettyPrint;
     function areSame(phoneNumber, rawInput) {
-        loadUtil();
+        syncLoadUtilIfNode();
         if (phoneNumber === rawInput) {
             return true;
         }

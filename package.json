@@ -17,7 +17,7 @@
     "url": "git+https://github.com/garronej/phone-number.git"
   },
   "author": "Joseph Garrone",
-  "license": "SEE LICENSE IN LICENSE",
+  "license": "MIT",
   "dependencies": {
     "intl-tel-input": "^13.0.4"
   },
