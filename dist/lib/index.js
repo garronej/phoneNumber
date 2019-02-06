@@ -28,7 +28,8 @@ var phoneNumber;
             ].join(" "));
         }
     }
-    function remoteLoadUtil() {
+    function remoteLoadUtil(src) {
+        if (src === void 0) { src = "//github.com/garronej/phone-number/releases/download/intlTelInputUtils/utils.js"; }
         return new Promise(function (resolve) {
             return (function (d, s, id) {
                 var js, fjs = d.getElementsByTagName(s)[0];
@@ -41,9 +42,9 @@ var phoneNumber;
                 js.onload = function () {
                     resolve();
                 };
-                js.src = "//github.com/garronej/phone-number/releases/download/intlTelInputUtils/utils.js";
+                js.src = src;
                 fjs.parentNode.insertBefore(js, fjs);
-            }(document, 'script', "intlTelInputUtils"));
+            }(document, "script", "intlTelInputUtils"));
         });
     }
     phoneNumber_1.remoteLoadUtil = remoteLoadUtil;

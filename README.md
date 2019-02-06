@@ -22,6 +22,14 @@ Or lazily load the heavy utils script dependency with:
 ```ts
 await phoneNumber.remoteLoadUtil();
 ```
+By default the script is loaded from:  
+``//github.com/garronej/phone-number/releases/download/intlTelInputUtils/utils.js``
+Some old browser require the script to be downloaded from the site's domain  
+in this case use:
+```ts
+await phoneNumber.remoteLoadUtil("//my-page.com/utils.js");
+```
+And host ``utils.js`` on your server.
 
 ## On Android
 

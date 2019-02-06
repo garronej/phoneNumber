@@ -43,7 +43,9 @@ export namespace phoneNumber {
 
 	}
 
-	export function remoteLoadUtil() {
+	export function remoteLoadUtil(
+		src: string = "//github.com/garronej/phone-number/releases/download/intlTelInputUtils/utils.js"
+	) {
 
 		return new Promise(resolve =>
 			(function (d, s, id) {
@@ -56,9 +58,9 @@ export namespace phoneNumber {
 				js.onload = function () {
 					resolve();
 				};
-				js.src = "//github.com/garronej/phone-number/releases/download/intlTelInputUtils/utils.js";
+				js.src = src;
 				fjs.parentNode!.insertBefore(js, fjs);
-			}(document, 'script', "intlTelInputUtils"))
+			}(document, "script", "intlTelInputUtils"))
 		);
 
 	}

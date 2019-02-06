@@ -1,6 +1,6 @@
 export declare type phoneNumber = string;
 export declare namespace phoneNumber {
-    function remoteLoadUtil(): Promise<{}>;
+    function remoteLoadUtil(src?: string): Promise<{}>;
     /**
      * This function will try to convert a raw string as a E164 formated phone number.
      *
