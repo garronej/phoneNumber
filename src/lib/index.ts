@@ -28,7 +28,7 @@ export namespace phoneNumber {
 		) {
 
 			//Trick browserify so it does not bundle.
-			let path = "../../node_modules/intl-tel-input/build/js/utils";
+			let path = "../../res/utils";
 
 			require(path);
 

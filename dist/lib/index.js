@@ -18,7 +18,7 @@ var phoneNumber;
         if (typeof process !== "undefined" &&
             process.release.name === "node") {
             //Trick browserify so it does not bundle.
-            var path = "../../node_modules/intl-tel-input/build/js/utils";
+            var path = "../../res/utils";
             require(path);
         }
         else {
