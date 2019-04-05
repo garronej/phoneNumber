@@ -3,10 +3,9 @@
   "main": "./dist/lib/index.js",
   "types": "./dist/lib/index.d.ts",
   "description": "Semasim library for handling phone numbers",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "scripts": {
     "tsc": "node ./node_modules/typescript/bin/tsc -p ./tsconfig.json",
-    "tsc-w": "node ./node_modules/typescript/bin/tsc -w -p ./tsconfig.json",
     "test": "node ./dist/test/main",
     "browserify": "node ./node_modules/browserify/bin/cmd . -o ./phone_number.js",
     "declare-global": "echo const global={}; | cat - ./res/utils.js ./phone_number.js > ./tmp && mv ./tmp ./phone_number.js",

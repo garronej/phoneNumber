@@ -1,6 +1,6 @@
-package org.linphone;
 
-import android.content.Context;
+package [YOUR_PACKAGE];
+
 import android.text.TextUtils;
 
 import org.liquidplayer.javascript.JSContext;
@@ -14,14 +14,17 @@ public class PhoneNumber {
 
     private static JSContext jsContext;
 
-    /** Need to be called before use */
-    public static void setContext(Context context){
+    private static synchronized void initJsContext(){
+
+        if( jsContext != null ){
+            return;
+        }
 
         jsContext = new JSContext();
 
-        InputStream ins = context.getResources().openRawResource(
-                context.getResources().getIdentifier("phone_number",
-                        "raw", context.getPackageName()));
+        InputStream ins = App.getContext().getResources().openRawResource(
+                App.getContext().getResources().getIdentifier("phone_number",
+                        "raw", App.getContext().getPackageName()));
 
         String script = new Scanner(ins,"UTF-8").useDelimiter("\\A").next();
 
@@ -32,9 +35,12 @@ public class PhoneNumber {
     /** null are transformed in undefined */
     private static JSValue makeJsQuery(String functionName, Object[] args) throws JSException {
 
-        String[] strArgs= new String[args.length];
 
-        for( int i = 0; i<args.length; i++){
+        int length = args != null ? args.length : 0;
+
+        String[] strArgs= new String[length];
+
+        for( int i = 0; i<length; i++){
 
             Object arg= args[i];
 
@@ -43,25 +49,27 @@ public class PhoneNumber {
             if( arg == null ){
                 str = "undefined";
             }else if( arg instanceof String ){
-
                 str = "'" + arg + "'";
-
-            }else if( arg instanceof Boolean ){
-
-                str= (Boolean) arg?"true":"false";
-
+            }else if( arg instanceof Boolean ) {
+                str = (Boolean) arg ? "true" : "false";
+            }else if( arg instanceof Integer) {
+                str = String.valueOf(arg);
+            }else if( arg instanceof Character){
+                str= arg.toString();
             }else{
-
-                throw new RuntimeException("Not a valid argument");
-
+                throw new RuntimeException("Not a valid argument: " + arg);
             }
-
 
             strArgs[i]= str;
 
         }
 
-        assert(jsContext != null);
+
+        if( jsContext == null ){
+
+            initJsContext();
+
+        }
 
         jsContext.evaluateScript( "var out= global['phoneNumber']." + functionName + "(" + TextUtils.join(", ", strArgs) + ");" );
 

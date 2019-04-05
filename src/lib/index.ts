@@ -24,6 +24,7 @@ export namespace phoneNumber {
 
 		if (
 			typeof process !== "undefined" &&
+			typeof process.release === "object" &&
 			process.release.name === "node"
 		) {
 

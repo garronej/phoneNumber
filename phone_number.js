@@ -658,6 +658,7 @@ var phoneNumber;
             return;
         }
         if (typeof process !== "undefined" &&
+            typeof process.release === "object" &&
             process.release.name === "node") {
             //Trick browserify so it does not bundle.
             var path = "../../res/utils";

@@ -44,11 +44,6 @@ dependencies {
 ```
 Import (copy/paste) the class ``./PhoneNumber.java`` to your package.
 
-Set context before being able to call the functions:
-```java
-PhoneNumber.setContext(context);
-```
-
 After that static class ``PhoneNumber`` provide the same API that the JS lib
 except for function optional argument where java ``null`` should be passed in   
 place of javascript ``undefined``.
