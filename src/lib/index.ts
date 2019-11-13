@@ -1,39 +1,20 @@
 declare const intlTelInputUtils: any;
 
+import importUtilScript from "./importUtilScript";
+
 export type phoneNumber = string;
 
 export namespace phoneNumber {
 
-	function syncLoadUtilIfNode() {
+	const isBrowser = typeof window !== "undefined" && typeof window.document !== "undefined";
 
-		const is_intlTelInputUtils_defined = (() => {
+	function syncLoadUtilIfNotRunningInBrowser() {
 
-			try {
-				intlTelInputUtils;
-			} catch{
-				return false;
-			}
-
-			return intlTelInputUtils !== undefined;
-
-		})();
-
-		if (is_intlTelInputUtils_defined) {
+		if( typeof intlTelInputUtils !== "undefined" ){
 			return;
 		}
 
-		if (
-			typeof process !== "undefined" &&
-			typeof process.release === "object" &&
-			process.release.name === "node"
-		) {
-
-			//Trick browserify so it does not bundle.
-			let path = "../../res/utils";
-
-			require(path);
-
-		} else {
+		if( isBrowser ){
 
 			throw new Error([
 				"Util script should be loaded, include it in the HTML",
@@ -41,6 +22,8 @@ export namespace phoneNumber {
 			].join(" "));
 
 		}
+
+		importUtilScript();
 
 	}
 
@@ -101,7 +84,7 @@ export namespace phoneNumber {
 		mustBeDialable: "MUST BE DIALABLE" | undefined = undefined
 	): phoneNumber {
 
-		syncLoadUtilIfNode();
+		syncLoadUtilIfNotRunningInBrowser();
 
 		const shouldFormatToE164: boolean = (() => {
 
@@ -184,7 +167,7 @@ export namespace phoneNumber {
 
 	function isValidE164(phoneNumber: phoneNumber): boolean {
 
-		syncLoadUtilIfNode();
+		syncLoadUtilIfNotRunningInBrowser();
 
 		return (
 			phoneNumber[0] === "+" &&
@@ -205,7 +188,7 @@ export namespace phoneNumber {
 		simIso?: string
 	): string {
 
-		syncLoadUtilIfNode();
+		syncLoadUtilIfNotRunningInBrowser();
 
 		if (!isValidE164(phoneNumber)) {
 			return phoneNumber;
@@ -254,7 +237,7 @@ export namespace phoneNumber {
 		rawInput: string
 	): boolean {
 
-		syncLoadUtilIfNode();
+		syncLoadUtilIfNotRunningInBrowser();
 
 		if (phoneNumber === rawInput) {
 			return true;

@@ -1,33 +1,20 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var importUtilScript_1 = require("./importUtilScript");
 var phoneNumber;
 (function (phoneNumber_1) {
-    function syncLoadUtilIfNode() {
-        var is_intlTelInputUtils_defined = (function () {
-            try {
-                intlTelInputUtils;
-            }
-            catch (_a) {
-                return false;
-            }
-            return intlTelInputUtils !== undefined;
-        })();
-        if (is_intlTelInputUtils_defined) {
+    var isBrowser = typeof window !== "undefined" && typeof window.document !== "undefined";
+    function syncLoadUtilIfNotRunningInBrowser() {
+        if (typeof intlTelInputUtils !== "undefined") {
             return;
         }
-        if (typeof process !== "undefined" &&
-            typeof process.release === "object" &&
-            process.release.name === "node") {
-            //Trick browserify so it does not bundle.
-            var path = "../../res/utils";
-            require(path);
-        }
-        else {
+        if (isBrowser) {
             throw new Error([
                 "Util script should be loaded, include it in the HTML",
                 "page or run async function remoteLoadUtil before use"
             ].join(" "));
         }
+        importUtilScript_1.default();
     }
     function remoteLoadUtil(src) {
         if (src === void 0) { src = "//github.com/garronej/phone-number/releases/download/intlTelInputUtils/utils.js"; }
@@ -80,7 +67,7 @@ var phoneNumber;
      */
     function build(rawInput, iso, mustBeDialable) {
         if (mustBeDialable === void 0) { mustBeDialable = undefined; }
-        syncLoadUtilIfNode();
+        syncLoadUtilIfNotRunningInBrowser();
         var shouldFormatToE164 = (function () {
             if (!iso) {
                 return false;
@@ -132,7 +119,7 @@ var phoneNumber;
     }
     phoneNumber_1.isDialable = isDialable;
     function isValidE164(phoneNumber) {
-        syncLoadUtilIfNode();
+        syncLoadUtilIfNotRunningInBrowser();
         return (phoneNumber[0] === "+" &&
             intlTelInputUtils.isValidNumber(phoneNumber));
     }
@@ -144,7 +131,7 @@ var phoneNumber;
      * Do nothing if it's not dialable.
      */
     function prettyPrint(phoneNumber, simIso) {
-        syncLoadUtilIfNode();
+        syncLoadUtilIfNotRunningInBrowser();
         if (!isValidE164(phoneNumber)) {
             return phoneNumber;
         }
@@ -162,7 +149,7 @@ var phoneNumber;
     }
     phoneNumber_1.prettyPrint = prettyPrint;
     function areSame(phoneNumber, rawInput) {
-        syncLoadUtilIfNode();
+        syncLoadUtilIfNotRunningInBrowser();
         if (phoneNumber === rawInput) {
             return true;
         }

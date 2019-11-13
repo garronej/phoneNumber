@@ -3,12 +3,12 @@
   "main": "./dist/lib/index.js",
   "types": "./dist/lib/index.d.ts",
   "description": "Semasim library for handling phone numbers",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "scripts": {
     "tsc": "node ./node_modules/typescript/bin/tsc -p ./tsconfig.json",
     "test": "node ./dist/test/main",
     "browserify": "node ./node_modules/browserify/bin/cmd . -o ./phone_number.js",
-    "declare-global": "echo const global={}; | cat - ./res/utils.js ./phone_number.js > ./tmp && mv ./tmp ./phone_number.js",
+    "declare-global": "echo 'const global={};' | cat - ./res/utils.js ./phone_number.js > ./tmp && mv ./tmp ./phone_number.js",
     "standalone": "npm run tsc && npm run browserify && npm run declare-global"
   },
   "repository": {
